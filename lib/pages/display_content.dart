@@ -32,13 +32,10 @@ class _DisplayContentState extends State<DisplayContent> {
   var androidInfo;
   List<String> _filesList = [];
   var storagePath;
-  
-  
-  
+
   Future<void> setExternalStoragePath() async {
     storagePath = await getExternalStorageDirectory();
   }
-
 
   Future<List<String>?> getPermission(String path) async {
     List<String>? paths = [];
@@ -137,10 +134,10 @@ class _DisplayContentState extends State<DisplayContent> {
                     case "Whatsapp":
                       if (androidInfo.version.sdkInt >= 28) {
                         //if android version is equals or greater than version 9
-                        _result = "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
-                      } else {
                         _result =
-                            "WhatsApp/Media/.Statuses";
+                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                      } else {
+                        _result = "WhatsApp/Media/.Statuses";
                       }
                       break;
                     case "businesswhatsapp":
@@ -148,37 +145,32 @@ class _DisplayContentState extends State<DisplayContent> {
                         _result =
                             "Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses";
                       } else {
-                        _result =
-                            "WhatsApp Business/Media/.Statuses";
+                        _result = "WhatsApp Business/Media/.Statuses";
                       }
                       break;
                     case "gbwhatsapp":
                       if (androidInfo.version.sdkInt >= 28) {
-                        _result =
-                            "GBWhatsApp/Media/.Statuses";
+                        _result = "GBWhatsApp/Media/.Statuses";
                       } else {
-                        _result =
-                            "GBWhatsApp/Media/.Statuses";
+                        _result = "GBWhatsApp/Media/.Statuses";
                       }
                       break;
-                      case " " :
-                        if (androidInfo.version.sdkInt >= 28) {
-                          //if android version is equals or greater than version 9
-                          _result =
-                          "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
-                        } else {
-                          _result =
-                          "WhatsApp/Media/.Statuses";
-                        }
-                        break;
-                    case "" :
+                    case " ":
                       if (androidInfo.version.sdkInt >= 28) {
                         //if android version is equals or greater than version 9
                         _result =
-                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
                       } else {
+                        _result = "WhatsApp/Media/.Statuses";
+                      }
+                      break;
+                    case "":
+                      if (androidInfo.version.sdkInt >= 28) {
+                        //if android version is equals or greater than version 9
                         _result =
-                        "WhatsApp/Media/.Statuses";
+                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                      } else {
+                        _result = "WhatsApp/Media/.Statuses";
                       }
                       break;
                     default:
@@ -187,8 +179,7 @@ class _DisplayContentState extends State<DisplayContent> {
                         _result =
                             "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
                       } else {
-                        _result =
-                            "WhatsApp/Media/.Statuses";
+                        _result = "WhatsApp/Media/.Statuses";
                       }
                   }
                 } else {
@@ -223,14 +214,16 @@ class _DisplayContentState extends State<DisplayContent> {
                 }
 
                 if (widget.isLocal) {
-                  if (!Directory("$_result").existsSync()){
+                  if (!Directory("$_result").existsSync()) {
                     return const Center(
-                      child: Text("Noting Downloaded Yet",style: TextStyle(
+                        child: Text(
+                      "Noting Downloaded Yet",
+                      style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                      ),)
-                    );
-                  }else{
+                      ),
+                    ));
+                  } else {
                     _filesList = Directory("$_result")
                         .listSync()
                         .map((item) => item.path)
@@ -243,85 +236,84 @@ class _DisplayContentState extends State<DisplayContent> {
                     }).toList(growable: false);
                     return mainContent(_filesList, _data);
                   }
-                }else{
-                  print ("The search path is ${"/storage/emulated/0/$_result"}");
+                } else {
+                  print("The search path is ${"/storage/emulated/0/$_result"}");
                   if (!Directory("/storage/emulated/0/$_result").existsSync()) {
                     return (_data == "instagram")
                         ? const Center(
-                        child: Text(
-                          "Nothing Downloaded Yet",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Poppins"),
-                        ))
+                            child: Text(
+                            "Nothing Downloaded Yet",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins"),
+                          ))
                         : Center(
-                        child: Text(
-                          "Please Install $_data",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Poppins"),
-                        ));
-                  }else{
+                            child: Text(
+                            "Please Install $_data",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Poppins"),
+                          ));
+                  } else {
                     if (androidInfo.version.sdkInt >= 28) {
                       //if android version 9 or above
                       return FutureBuilder(
-                        //so the app does not start searching the directory until we fetch all the paths.
+                          //so the app does not start searching the directory until we fetch all the paths.
                           future: getPermission(_result),
                           builder: (ctx, snapShot) {
                             if (snapShot.hasData) {
-                              List<String>? data = snapShot.data as List<String>?;
+                              List<String>? data =
+                                  snapShot.data as List<String>?;
                               // print("the data is $data");
                               //remove any non wanted files
                               _filesList =
                                   data!.map((item) => item).where((item) {
-                                    if (widget.type == "images") {
-                                      return item.endsWith(".jpg") ||
-                                          item.endsWith(".png") ||
-                                          item.endsWith("jpeg");
-                                    } else {
-                                      return item.endsWith(".mp4") ||
-                                          item.endsWith(".3gp");
-                                    }
-                                  }).toList(growable: false);
+                                if (widget.type == "images") {
+                                  return item.endsWith(".jpg") ||
+                                      item.endsWith(".png") ||
+                                      item.endsWith("jpeg");
+                                } else {
+                                  return item.endsWith(".mp4") ||
+                                      item.endsWith(".3gp");
+                                }
+                              }).toList(growable: false);
                               // print ("the fileList is $_filesList");
                               return mainContent(_filesList, _data);
                             } else if (snapShot.hasError) {
-                              print ("Error ${snapShot.error}");
+                              print("Error ${snapShot.error}");
                               return Container();
-                            }
-                            else {
+                            } else {
                               return CircularProgressIndicator();
                             }
                           });
                     } else {
                       //if android 8 or below
-                  _filesList = Directory("/storage/emulated/0/$_result")
-                      .listSync()
-                      .map((item) => item.path)
-                      .where((item) {
-                    if (widget.type == "images") {
-                      return item.endsWith(".jpg") || item.endsWith(".png");
-                    } else {
-                      return item.endsWith(".mp4") || item.endsWith(".3gp");
+                      _filesList = Directory("/storage/emulated/0/$_result")
+                          .listSync()
+                          .map((item) => item.path)
+                          .where((item) {
+                        if (widget.type == "images") {
+                          return item.endsWith(".jpg") || item.endsWith(".png");
+                        } else {
+                          return item.endsWith(".mp4") || item.endsWith(".3gp");
+                        }
+                      }).toList(growable: false);
+                      return mainContent(_filesList, _data);
                     }
-                  }).toList(growable: false);
-                return mainContent(_filesList, _data);
-              }
                   }
-              }} else if (snapShot.hasError) {
-                print ("error in first future builder ${snapShot.error}");
+                }
+              } else if (snapShot.hasError) {
+                print("error in first future builder ${snapShot.error}");
                 return const Text("Error!!");
               }
             } else {
               //not connected yet waiting, show the progress indicator
               return SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator());
+                  width: 20, height: 20, child: CircularProgressIndicator());
             }
             return const Center(child: Text("Unknown Error"));
           });
