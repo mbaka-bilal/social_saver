@@ -1,16 +1,7 @@
 # social_saver
 
-A new Flutter project.
+A Flutter app to save images and videos from some social media platforms
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Webp net-resizeimage](https://user-images.githubusercontent.com/68550309/166117076-23eabd5d-393f-45b4-91bb-8acf62d4d1c8.png)
+![Screenshot_20220418-050559](https://user-images.githubusercontent.com/68550309/166117082-3905c811-5b4e-41d2-ad29-2d7e776e34a6.png)
+![Screenshot_20220418-050541](https://user-images.githubusercontent.com/68550309/166117087-f184ec00-5265-4497-9b1b-c2eea32bbb25.png)
