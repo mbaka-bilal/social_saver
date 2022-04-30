@@ -210,7 +210,7 @@ class _DisplayContentState extends State<DisplayContent> {
                 //end setting the correct path
 
                 if (_data == "instagram" && !widget.isLocal) {
-                  return InstagramPage();
+                  return const InstagramPage();
                 }
 
                 if (widget.isLocal) {
@@ -287,7 +287,13 @@ class _DisplayContentState extends State<DisplayContent> {
                               print("Error ${snapShot.error}");
                               return Container();
                             } else {
-                              return CircularProgressIndicator();
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  CircularProgressIndicator(),
+                                ],
+                              );
                             }
                           });
                     } else {
@@ -312,10 +318,19 @@ class _DisplayContentState extends State<DisplayContent> {
               }
             } else {
               //not connected yet waiting, show the progress indicator
-              return SizedBox(
-                  width: 20, height: 20, child: CircularProgressIndicator());
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  CircularProgressIndicator(),
+                ],
+              );
             }
-            return const Center(child: Text("Unknown Error"));
+            return const Center(
+                child: Text(
+              "Please Select a Platform",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ));
           });
     });
   }
