@@ -21,12 +21,14 @@ class VideoCard extends StatefulWidget {
     required this.platform,
     required this.isLocalType,
     required this.index,
+    required this.androidVersion,
   }) : super(key: key);
 
   // final bool exists;
   final String path;
   final String platform;
   final bool isLocalType;
+  final int androidVersion;
   final int index;
 
   @override
@@ -80,7 +82,9 @@ class _VideoCardState extends State<VideoCard> {
                 ),
                 FutureBuilder(
                     future: FileActions.checkFileDownloaded(
-                        platform: widget.platform, path: widget.path),
+                        platform: widget.platform,
+                        path: widget.path,
+                        androidVersion: widget.androidVersion),
                     builder: (ctx, snapShot) {
                       if (snapShot.hasData) {
                         var data = snapShot.data as bool;
@@ -101,9 +105,15 @@ class _VideoCardState extends State<VideoCard> {
                                 setState(() {});
                                 null;
                               } else {
-                                FileActions.saveFile(
-                                    platform: widget.platform,
-                                    path: widget.path);
+                                if (widget.androidVersion < 28) {
+                                  FileActions.saveFileSdkLess28(
+                                      platform: widget.platform,
+                                      path: widget.path);
+                                } else {
+                                  FileActions.saveFile(
+                                      platform: widget.platform,
+                                      path: widget.path);
+                                }
                                 setState(() {
                                   _downloading = false;
                                 });
@@ -219,16 +229,16 @@ class _VideoCardState extends State<VideoCard> {
                           right: 0,
                           child: Padding(
                             padding:
-                            const EdgeInsets.only(bottom: 25.0, right: 10),
+                                const EdgeInsets.only(bottom: 25.0, right: 10),
                             child: CircleAvatar(
                               radius: 17,
                               backgroundColor: const Color(0xF26D6767),
                               child: (_downloading)
                                   ? const CircularProgressIndicator()
                                   : CircleAvatar(
-                                  radius: 17,
-                                  backgroundColor: const Color(0xF26D6767),
-                                  child: _icon),
+                                      radius: 17,
+                                      backgroundColor: const Color(0xF26D6767),
+                                      child: _icon),
                             ),
                           ),
                         );
@@ -238,31 +248,31 @@ class _VideoCardState extends State<VideoCard> {
                     }),
                 Positioned.fill(
                     child: Align(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PlayVideo(
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlayVideo(
                                     videoPath: widget.path,
                                     type: widget.isLocalType,
                                   )));
-                        },
-                        child: ClipRRect(
-                            child: Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(color: Colors.white, width: 3)),
-                              child: const Icon(
-                                Icons.play_arrow_outlined,
-                                color: Colors.white,
-                              ),
-                            )),
+                    },
+                    child: ClipRRect(
+                        child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(color: Colors.white, width: 3)),
+                      child: const Icon(
+                        Icons.play_arrow_outlined,
+                        color: Colors.white,
                       ),
-                    ))
+                    )),
+                  ),
+                ))
               ],
             );
           } else if (snapShot.hasError) {

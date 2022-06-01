@@ -18,12 +18,14 @@ class ImageCard extends StatefulWidget {
     required this.platform,
     required this.isLocalType,
     required this.index,
+    required this.androidVersion,
   }) : super(key: key);
 
   final String path;
   final String platform;
   final bool isLocalType;
   final int index;
+  final int androidVersion;
 
   // final bool downloaded;
 
@@ -61,7 +63,9 @@ class _ImageCardState extends State<ImageCard> {
             ),
             FutureBuilder(
                 future: FileActions.checkFileDownloaded(
-                    platform: widget.platform, path: widget.path),
+                    platform: widget.platform,
+                    path: widget.path,
+                    androidVersion: widget.androidVersion),
                 builder: (ctx, snapShot) {
                   if (snapShot.hasData) {
                     var data = snapShot.data as bool;
@@ -85,8 +89,13 @@ class _ImageCardState extends State<ImageCard> {
                             //   _downloading = true;
                             // });
 
-                            FileActions.saveFile(
-                                platform: widget.platform, path: widget.path);
+                            if (widget.androidVersion < 28) {
+                              FileActions.saveFileSdkLess28(
+                                  platform: widget.platform, path: widget.path);
+                            } else {
+                              FileActions.saveFile(
+                                  platform: widget.platform, path: widget.path);
+                            }
                             setState(() {
                               _downloading = false;
                             });

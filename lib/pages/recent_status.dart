@@ -77,12 +77,10 @@ class _RecentStatusState extends State<RecentStatus> {
 
   @override
   Widget build(BuildContext context) {
-    // var _provider = Provider.of<FileActions>(context);
 
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        // backgroundColor: Colors.white,
         elevation: 0,
         leading: GestureDetector(
           child: const Icon(StaggardBar_manual.bars_staggered_solid,
@@ -102,14 +100,6 @@ class _RecentStatusState extends State<RecentStatus> {
         ),
 
         actions: [
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: const Icon(
-          //     Check_Manual.check,
-          //     color: Color(0xff085e55),
-          //     size: 20,
-          //   ),
-          // ),
 
           Align(
             //which icon should i display on the appBar
@@ -144,17 +134,6 @@ class _RecentStatusState extends State<RecentStatus> {
           const SizedBox(
             width: 10,
           ),
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigator.of(context)
-          //         .push(MaterialPageRoute(builder: (context) => const Help()));
-          //   },
-          //   child: const Icon(
-          //     Icons.help_outline,
-          //     color: Color(0xff085e55),
-          //     size: 20,
-          //   ),
-          // ),
           const SizedBox(
             width: 10,
           ),
@@ -178,7 +157,7 @@ class _RecentStatusState extends State<RecentStatus> {
         String _tempResult = "";
 
         if (_result == "" || _result == " " || _result == null) {
-          _tempResult = "Whatsapp"; //just incase, code should never reach here
+          _tempResult = "Whatsapp"; //just in case, code should never reach here
         }
 
         _loadBannerAd(_tempResult); //the type of banner i should display

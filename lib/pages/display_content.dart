@@ -79,6 +79,7 @@ class _DisplayContentState extends State<DisplayContent> {
                 path: e,
                 platform: platform,
                 index: index,
+                androidVersion: androidInfo.version.sdkInt,
                 // downloaded: false,
               );
             } else {
@@ -87,6 +88,7 @@ class _DisplayContentState extends State<DisplayContent> {
                 isLocalType: widget.isLocal,
                 path: e,
                 platform: platform,
+                androidVersion: androidInfo.version.sdkInt,
                 index: index,
               );
             }
@@ -187,25 +189,25 @@ class _DisplayContentState extends State<DisplayContent> {
                   // if we are getting local saved files
                   switch (_data) {
                     case "Whatsapp":
-                      _result = "${storagePath.path}/Whatsapp/";
+                      _result = "/storage/emulated/0/saveit/Whatsapp/";
                       break;
                     case "businesswhatsapp":
-                      _result = "${storagePath.path}/businesswhatsapp/";
+                      _result = "/storage/emulated/0/saveit/businesswhatsapp/";
                       break;
                     case "gbwhatsapp":
-                      _result = "${storagePath.path}/gbwhatsapp/";
+                      _result = "/storage/emulated/0/saveit/gbwhatsapp/";
                       break;
                     case "instagram":
-                      _result = "${storagePath.path}/instagram/";
+                      _result = "/storage/emulated/0/saveit/instagram/";
                       break;
                     case " ":
-                      _result = "${storagePath.path}/Whatsapp/";
+                      _result = "/storage/emulated/0/saveit/Whatsapp/";
                       break;
                     case "":
-                      _result = "${storagePath.path}/Whatsapp/";
+                      _result = "/storage/emulated/0/saveit/Whatsapp/";
                       break;
                     default:
-                      _result = "${storagePath.path}/Whatsapp/";
+                      _result = "/storage/emulated/0/saveit/Whatsapp/";
                   }
                 }
                 //end setting the correct path
@@ -238,7 +240,7 @@ class _DisplayContentState extends State<DisplayContent> {
                     return mainContent(_filesList, _data);
                   }
                 } else {
-                  print("The search path is ${"/storage/emulated/0/$_result"}");
+                  // print("The search path is ${"/storage/emulated/0/$_result"}");
                   if (!Directory("/storage/emulated/0/$_result").existsSync()) {
                     return (_data == "instagram")
                         ? const Center(
