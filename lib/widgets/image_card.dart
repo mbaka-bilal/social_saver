@@ -80,76 +80,87 @@ class _ImageCardState extends State<ImageCard> {
                             setState(() {});
                             null;
                           } else {
-                            if (widget.index % 4 == 0) {
-                              var interstitialAd;
-                              setState(() {
-                                // print("in set dstate");
-                                _downloading = true;
-                              });
+                            // setState(() {
+                            //   // print("in set dstate");
+                            //   _downloading = true;
+                            // });
 
-                              await InterstitialAd.load(
-                                adUnitId:
-                                    "ca-app-pub-3940256099942544/8691691433",
-                                //"ca-app-pub-3940256099942544/1033173712",
-                                request: AdRequest(),
-                                adLoadCallback: InterstitialAdLoadCallback(
-                                    onAdLoaded: (InterstitialAd ad) async {
-                                  interstitialAd = ad;
-                                  //handle full screen content
-                                  interstitialAd.fullScreenContentCallback =
-                                      FullScreenContentCallback(
-                                    onAdShowedFullScreenContent:
-                                        (InterstitialAd ad) {
-                                      print('%ad onAdShowedFullScreenContent.');
-                                    },
-                                    onAdDismissedFullScreenContent:
-                                        (InterstitialAd ad) {
-                                      print(
-                                          '$ad onAdDismissedFullScreenContent.');
+                            FileActions.saveFile(
+                                platform: widget.platform, path: widget.path);
+                            setState(() {
+                              _downloading = false;
+                            });
 
-                                      FileActions.saveFile(
-                                          platform: widget.platform,
-                                          path: widget.path);
-                                      setState(() {
-                                        _downloading = false;
-                                      });
-                                      ad.dispose();
-                                    },
-                                    onAdFailedToShowFullScreenContent:
-                                        (InterstitialAd ad, AdError error) {
-                                      print(
-                                          '$ad onAdFailedToShowFullScreenContent: $error');
-
-                                      FileActions.saveFile(
-                                          platform: widget.platform,
-                                          path: widget.path);
-                                      setState(() {
-                                        _downloading = false;
-                                      });
-                                      ad.dispose();
-                                    },
-                                    onAdImpression: (InterstitialAd ad) =>
-                                        print('$ad impression occurred.'),
-                                  );
-                                  interstitialAd.show();
-                                }, onAdFailedToLoad: (LoadAdError error) {
-                                  print("Error loading intersitialAd $error");
-
-                                  FileActions.saveFile(
-                                      platform: widget.platform,
-                                      path: widget.path);
-                                  setState(() {
-                                    _downloading = false;
-                                  });
-                                }),
-                              );
-                            } else {
-                              FileActions.saveFile(
-                                  platform: widget.platform, path: widget.path);
-                              setState(() {
-                                _downloading = false;
-                              });
-                            }
+                            // if (widget.index % 4 == 0) {
+                            //   var interstitialAd;
+                            //   setState(() {
+                            //     // print("in set dstate");
+                            //     _downloading = true;
+                            //   });
+                            //
+                            //   await InterstitialAd.load(
+                            //     adUnitId:
+                            //         "ca-app-pub-3940256099942544/8691691433",
+                            //     //"ca-app-pub-3940256099942544/1033173712",
+                            //     request: AdRequest(),
+                            //     adLoadCallback: InterstitialAdLoadCallback(
+                            //         onAdLoaded: (InterstitialAd ad) async {
+                            //       interstitialAd = ad;
+                            //       //handle full screen content
+                            //       interstitialAd.fullScreenContentCallback =
+                            //           FullScreenContentCallback(
+                            //         onAdShowedFullScreenContent:
+                            //             (InterstitialAd ad) {
+                            //           print('%ad onAdShowedFullScreenContent.');
+                            //         },
+                            //         onAdDismissedFullScreenContent:
+                            //             (InterstitialAd ad) {
+                            //           print(
+                            //               '$ad onAdDismissedFullScreenContent.');
+                            //
+                            //           FileActions.saveFile(
+                            //               platform: widget.platform,
+                            //               path: widget.path);
+                            //           setState(() {
+                            //             _downloading = false;
+                            //           });
+                            //           ad.dispose();
+                            //         },
+                            //         onAdFailedToShowFullScreenContent:
+                            //             (InterstitialAd ad, AdError error) {
+                            //           print(
+                            //               '$ad onAdFailedToShowFullScreenContent: $error');
+                            //
+                            //           FileActions.saveFile(
+                            //               platform: widget.platform,
+                            //               path: widget.path);
+                            //           setState(() {
+                            //             _downloading = false;
+                            //           });
+                            //           ad.dispose();
+                            //         },
+                            //         onAdImpression: (InterstitialAd ad) =>
+                            //             print('$ad impression occurred.'),
+                            //       );
+                            //       interstitialAd.show();
+                            //     }, onAdFailedToLoad: (LoadAdError error) {
+                            //       print("Error loading intersitialAd $error");
+                            //
+                            //       FileActions.saveFile(
+                            //           platform: widget.platform,
+                            //           path: widget.path);
+                            //       setState(() {
+                            //         _downloading = false;
+                            //       });
+                            //     }),
+                            //   );
+                            // } else {
+                            //   FileActions.saveFile(
+                            //       platform: widget.platform, path: widget.path);
+                            //   setState(() {
+                            //     _downloading = false;
+                            //   });
+                            // }
                           }
                         },
                         child: (_downloading)

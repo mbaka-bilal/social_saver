@@ -3,9 +3,7 @@
     package="com.gymnogene.social_saver">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        ></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 <!--    tools:remove="android:maxSdkVersion"-->
 <!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"></uses-permission>-->
 

@@ -19,10 +19,6 @@ class SingleItem extends StatefulWidget {
 }
 
 class _SingleItemState extends State<SingleItem> {
-  /* TODO
-      1. implement the sharing to different platforms
-      2. Implement the sharing to whatsapp
-  */
 
   @override
   void initState() {
@@ -101,19 +97,6 @@ class _SingleItemState extends State<SingleItem> {
                                 ),
                               ),
                             ),
-                            // const SizedBox(
-                            //   width: 10,
-                            // ),
-                            // CircleAvatar(
-                            //   backgroundColor: const Color(0xFF20c65a),
-                            //   radius: 25,
-                            //   child: GestureDetector(
-                            //     child: const FaIcon(
-                            //       FontAwesomeIcons.whatsapp,
-                            //       color: Colors.white,
-                            //     ),
-                            //   ),
-                            // ),
                             const SizedBox(
                               width: 10,
                             ),
@@ -137,19 +120,7 @@ class _SingleItemState extends State<SingleItem> {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
-                          children: [
-                            // CircleAvatar(
-                            //   backgroundColor: const Color(0xFF20c65a),
-                            //   radius: 25,
-                            //
-                            //   child: GestureDetector(
-                            //     onTap: () {
-                            //
-                            //     },
-                            //     child: const Icon(Download_Manual.download,color: Colors.white,),
-                            //   ),
-                            // )
-                          ],
+                          children: [],
                         )),
             )
           ]),

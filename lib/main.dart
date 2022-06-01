@@ -48,9 +48,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: themeProvider.currentTheme,
-          home:
-
-          AnimatedSplashScreen.withScreenFunction(
+          home: AnimatedSplashScreen.withScreenFunction(
               splashIconSize: 100,
               screenFunction: () async {
                 _controller.forward();
@@ -59,6 +57,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               splash: SplashPageAnimation(
                 controller: _controller,
               )),
+          routes: {
+            "/home": (ctx) => Home(),
+          },
         );
       }),
     );

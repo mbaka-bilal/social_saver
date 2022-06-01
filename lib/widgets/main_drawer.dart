@@ -238,33 +238,33 @@ class _MainDrawerState extends State<MainDrawer> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      //open google play page for rating the app.
-                      //TODO update this to the current play store name
-                      launch(
-                          "https://play.google.com/store/apps/details?id=game.play.wordclass");
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        const FaIcon(
-                          FontAwesomeIcons.thumbsUp,
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "Rate Save It",
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                      ],
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     //open google play page for rating the app.
+                  //     //TODO add the current play store app link
+                  //     // launch(
+                  //     //     "https://play.google.com/store/apps/details?id=game.play.wordclass");
+                  //   },
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //       const SizedBox(
+                  //         width: 20,
+                  //       ),
+                  //       const FaIcon(
+                  //         FontAwesomeIcons.thumbsUp,
+                  //       ),
+                  //       const SizedBox(
+                  //         width: 15,
+                  //       ),
+                  //       Text(
+                  //         "Rate Save It",
+                  //         style: Theme.of(context).textTheme.bodyText2,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 10,
                   ),

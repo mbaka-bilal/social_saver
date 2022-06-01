@@ -15,6 +15,7 @@ import '../widgets/image_card.dart';
 import '../pages/instagram_page.dart';
 
 class DisplayContent extends StatefulWidget {
+  /* Show each individual image or video */
   const DisplayContent({Key? key, required this.type, required this.isLocal})
       : super(key: key);
 
@@ -27,7 +28,7 @@ class DisplayContent extends StatefulWidget {
 
 class _DisplayContentState extends State<DisplayContent> {
   int index = 0;
-  late Saf saf;
+
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   var androidInfo;
   List<String> _filesList = [];
@@ -38,20 +39,20 @@ class _DisplayContentState extends State<DisplayContent> {
   }
 
   Future<List<String>?> getPermission(String path) async {
+    Saf saf = Saf(path);
     List<String>? paths = [];
-    saf = Saf(path);
+    // print ("the path is ${saf}");
     // List<String>? availablePaths = await saf.getCachedFilesPath();
-    await saf.getDirectoryPermission(isDynamic: false).then((value) async {
-      // await saf.cache()
-      // print ("files path is ${await saf.cache()}");
-      await saf.cache().then((e) {
-        //it is cahce that works on and saf.getFilesPath()
-        paths.addAll(e!);
-      }).catchError((err) {
-        print("Error----------- $err");
-      });
-    }).catchError((err) {
+    await saf.getDirectoryPermission(isDynamic: false).catchError((err) {
       print("Unable to grant permission $err");
+    });
+    // await saf.cache()
+    // print ("files path is ${await saf.cache()}");
+    await saf.cache().then((e) {
+      //it is cahce that works on and saf.getFilesPath()
+      paths.addAll(e!);
+    }).catchError((err) {
+      print("Error using cache----------- $err");
     });
     return paths;
   }

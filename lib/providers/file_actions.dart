@@ -14,6 +14,7 @@ class FileActions with ChangeNotifier {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
   Future<void> getSharedPreferences() async {
+    /* get the currently selected platform */
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
     _platform = await _sharedPreferences.getString("activePlatform");
