@@ -71,7 +71,6 @@ class _RecentStatusState extends State<RecentStatus> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     bannerTimer.cancel();
     super.dispose();
   }

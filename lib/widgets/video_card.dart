@@ -57,7 +57,6 @@ class _VideoCardState extends State<VideoCard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     future = generateThumbnail();
   }
