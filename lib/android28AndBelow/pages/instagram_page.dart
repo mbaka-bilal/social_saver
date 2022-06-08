@@ -9,7 +9,7 @@ import 'package:social_saver/models/instapost.dart';
 import 'package:dio/dio.dart';
 import 'package:social_saver/models/posttype.dart';
 
-import '../helpers/getpost.dart';
+import '../../helpers/getpost.dart';
 
 /*page to download instagram videos and images */
 class InstagramPage extends StatefulWidget {

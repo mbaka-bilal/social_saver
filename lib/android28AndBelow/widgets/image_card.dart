@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-import '../download__manual_icons.dart';
+import '../../download__manual_icons.dart';
 import '../pages/single_item.dart';
 import '../providers/file_actions.dart';
 

@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:saf/saf.dart';
+import 'package:social_saver/android29AndAbove/pages/recent_status_saf.dart';
 
-import '../pages/recent_status.dart';
-
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeSaf extends StatefulWidget {
+  const HomeSaf({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeSafState createState() => _HomeSafState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeSafState extends State<HomeSaf> {
   int _bottomNavSelectedIndex = 0;
   final List<Widget> _bottomNavPages = [
     //the nav pages, first one is for whatsapp status,second for saved files
-    const RecentStatus(
+    const RecentStatusSaf(
       isLocal: false,
     ),
-    const RecentStatus(
+    const RecentStatusSaf(
       isLocal: true,
     ) //,const SettingsPage()
   ];
 
-
   Future<bool> checkPermission() async {
     var _status = await Permission.storage.status;
-
 
     if (_status != PermissionStatus.granted) {
       var _result = await Permission.storage.request();

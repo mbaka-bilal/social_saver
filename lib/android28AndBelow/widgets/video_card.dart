@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:social_saver/widgets/play_video.dart';
+import 'package:social_saver/android28AndBelow/widgets/play_video.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:path/path.dart';
 
-import '../download__manual_icons.dart';
+import '../../download__manual_icons.dart';
 import '../providers/file_actions.dart';
 
 class VideoCard extends StatefulWidget {

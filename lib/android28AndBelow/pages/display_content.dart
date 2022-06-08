@@ -1,18 +1,19 @@
+import 'dart:ffi';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-// import 'package:path/path.dart' as pathFile;
-import 'package:saf/saf.dart';
+// import 'package:saf/saf.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:shared_storage/saf.dart' as saf;
 
 import '../providers/file_actions.dart';
 import '../widgets/video_card.dart';
 import '../widgets/image_card.dart';
-import '../pages/instagram_page.dart';
+import 'instagram_page.dart';
 
 class DisplayContent extends StatefulWidget {
   /* Show each individual image or video */
@@ -32,29 +33,84 @@ class _DisplayContentState extends State<DisplayContent> {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   var androidInfo;
   List<String> _filesList = [];
+  List<saf.PartialDocumentFile> _partialFileList = [];
   var storagePath;
 
   Future<void> setExternalStoragePath() async {
     storagePath = await getExternalStorageDirectory();
   }
 
-  Future<List<String>?> getPermission(String path) async {
-    Saf saf = Saf(path);
-    List<String>? paths = [];
-    // print ("the path is ${saf}");
-    // List<String>? availablePaths = await saf.getCachedFilesPath();
-    await saf.getDirectoryPermission(isDynamic: false).catchError((err) {
-      print("Unable to grant permission $err");
-    });
-    // await saf.cache()
-    // print ("files path is ${await saf.cache()}");
-    await saf.cache().then((e) {
-      //it is cahce that works on and saf.getFilesPath()
-      paths.addAll(e!);
-    }).catchError((err) {
-      print("Error using cache----------- $err");
-    });
-    return paths;
+  Future<List<saf.PartialDocumentFile>?> getAllFilesSaf() async {
+    List<String>? _paths = [];
+    // List<saf.UriPermission>? persistedPermissionUris;
+    Uri whatsAppUri = Uri.parse(
+        'content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses');
+    const List<saf.DocumentFileColumn> columns = <saf.DocumentFileColumn>[
+      saf.DocumentFileColumn.mimeType
+    ];
+    final Uri? grantedUri = await saf.openDocumentTree(initialUri: whatsAppUri);
+
+    // persistedPermissionUris = await saf.persistedUriPermissions();
+
+    // if (!(await saf.isPersistedUri(whatsAppUri))) {
+    //    grantedUri =
+    //       await saf.openDocumentTree(initialUri: whatsAppUri);
+    //
+    // }
+
+    //read all files in the current directory
+    final saf.DocumentFile? documentFileOfMyGrantedUri = await grantedUri!
+        .toDocumentFile();
+    final List<saf.PartialDocumentFile> files = [];
+    final Stream<
+        saf.PartialDocumentFile> onNewFileLoaded = documentFileOfMyGrantedUri!
+        .listFiles(columns);
+    onNewFileLoaded.listen((event) {
+      // if (event.data![saf.DocumentFileColumn.mimeType] == "image/jpeg"){
+      //
+      // }
+      files.add(event);
+    },
+      // onDone: () => print("the files are ${files[0].data}")
+    );
+
+    return files;
+
+    // if (grantedUri != null){
+    //   print ("permission granted");
+    //   print ("the granted Uri is $grantedUri");
+    // }
+
+    // List<String>? directoriesPath = await Saf.getPersistedPermissionDirectories();
+    // print ("the direcy path is $directoriesPath");
+    // if (directoriesPath!.contains(path.replaceAll("/storage/emulated/0/", ""))){
+    //   List<String>? filePaths = await saf.getFilesPath();
+    //   print ("the filePaths are $filePaths");
+    //   _paths.addAll(List.castFrom(filePaths!));
+    // }
+
+    // bool? isGranted = await saf.getDirectoryPermission(isDynamic: true);
+    //
+    // if (isGranted!){
+    //   print ("Permission granted");
+    // }else{
+    //   print ("Permission denied");
+    // }
+
+    // await saf.cache().then((e) {
+    //   //it is cahce that works on and saf.getFilesPath()
+    //   paths.addAll(e!);
+    // }).catchError((err) {
+    //   print("Error using cache----------- $err");
+    // });
+
+    // if (status != null && status!){
+    //
+    // }else{
+    //   print("failed to get the permission");
+    // }
+
+    // return _paths;
   }
 
   Future<void> getAndroidInfo() async {
@@ -138,7 +194,7 @@ class _DisplayContentState extends State<DisplayContent> {
                       if (androidInfo.version.sdkInt >= 28) {
                         //if android version is equals or greater than version 9
                         _result =
-                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
                       } else {
                         _result = "WhatsApp/Media/.Statuses";
                       }
@@ -146,7 +202,7 @@ class _DisplayContentState extends State<DisplayContent> {
                     case "businesswhatsapp":
                       if (androidInfo.version.sdkInt >= 28) {
                         _result =
-                            "Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses";
+                        "Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses";
                       } else {
                         _result = "WhatsApp Business/Media/.Statuses";
                       }
@@ -162,7 +218,7 @@ class _DisplayContentState extends State<DisplayContent> {
                       if (androidInfo.version.sdkInt >= 28) {
                         //if android version is equals or greater than version 9
                         _result =
-                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
                       } else {
                         _result = "WhatsApp/Media/.Statuses";
                       }
@@ -171,7 +227,7 @@ class _DisplayContentState extends State<DisplayContent> {
                       if (androidInfo.version.sdkInt >= 28) {
                         //if android version is equals or greater than version 9
                         _result =
-                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
                       } else {
                         _result = "WhatsApp/Media/.Statuses";
                       }
@@ -180,7 +236,7 @@ class _DisplayContentState extends State<DisplayContent> {
                       if (androidInfo.version.sdkInt >= 28) {
                         //if android version is equals or greater than version 9
                         _result =
-                            "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
+                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
                       } else {
                         _result = "WhatsApp/Media/.Statuses";
                       }
@@ -220,12 +276,12 @@ class _DisplayContentState extends State<DisplayContent> {
                   if (!Directory("$_result").existsSync()) {
                     return const Center(
                         child: Text(
-                      "Noting Downloaded Yet",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ));
+                          "Noting Downloaded Yet",
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ));
                   } else {
                     _filesList = Directory("$_result")
                         .listSync()
@@ -244,47 +300,47 @@ class _DisplayContentState extends State<DisplayContent> {
                   if (!Directory("/storage/emulated/0/$_result").existsSync()) {
                     return (_data == "instagram")
                         ? const Center(
-                            child: Text(
-                            "Nothing Downloaded Yet",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins"),
-                          ))
+                        child: Text(
+                          "Nothing Downloaded Yet",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins"),
+                        ))
                         : Center(
-                            child: Text(
-                            "Please Install $_data",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins"),
-                          ));
+                        child: Text(
+                          "Please Install $_data",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins"),
+                        ));
                   } else {
                     if (androidInfo.version.sdkInt >= 28) {
                       //if android version 9 or above
                       return FutureBuilder(
-                          //so the app does not start searching the directory until we fetch all the paths.
-                          future: getPermission(_result),
+                        //so the app does not start searching the directory until we fetch all the paths.
+                          future: getAllFilesSaf(),
                           builder: (ctx, snapShot) {
                             if (snapShot.hasData) {
-                              List<String>? data =
-                                  snapShot.data as List<String>?;
+                              List<saf.PartialDocumentFile>? data =
+                              snapShot.data as List<saf.PartialDocumentFile>?;
                               // print("the data is $data");
                               //remove any non wanted files
-                              _filesList =
-                                  data!.map((item) => item).where((item) {
-                                if (widget.type == "images") {
-                                  return item.endsWith(".jpg") ||
-                                      item.endsWith(".png") ||
-                                      item.endsWith("jpeg");
-                                } else {
-                                  return item.endsWith(".mp4") ||
-                                      item.endsWith(".3gp");
-                                }
-                              }).toList(growable: false);
-                              // print ("the fileList is $_filesList");
+                              // _partialFileList =
+                              //     data!.map((item) => item).where((item) {
+                              //       Uint8List? content = saf.getDocumentContent(item.metadata!.uri!);
+                              //       final mimeType = item.
+                              //   if (widget.type == "images") {
+                              //     return item[saf.DocumentFileColumn.mimeType];
+                              //   } else {
+                              //     return item.endsWith(".mp4") ||
+                              //         item.endsWith(".3gp");
+                              //   }
+                              // }).toList(growable: false);
+                              // // print ("the fileList is $_filesList");
                               return mainContent(_filesList, _data);
                             } else if (snapShot.hasError) {
                               print("Error ${snapShot.error}");
@@ -331,9 +387,9 @@ class _DisplayContentState extends State<DisplayContent> {
             }
             return const Center(
                 child: Text(
-              "Please Select a Platform",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ));
+                  "Please Select a Platform",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ));
           });
     });
   }

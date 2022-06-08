@@ -5,13 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-import '../pages/display_content.dart';
-import '../pages/help.dart';
+import 'display_content.dart';
 import '../providers/file_actions.dart';
-import '../staggard_bar_manual_icons.dart';
+import '../../staggard_bar_manual_icons.dart';
 import '../widgets/main_drawer.dart';
-import '../helpers/ad_helper.dart';
-import '../providers/file_actions.dart';
+import '../../helpers/ad_helper.dart';
 
 class RecentStatus extends StatefulWidget {
   const RecentStatus({Key? key, required this.isLocal, this.selectedPage = 0})
@@ -31,16 +29,12 @@ class _RecentStatusState extends State<RecentStatus> {
   int _currentPageIndex = 0;
   final AdHelper _adObj = AdHelper();
   late Timer bannerTimer;
-
   late BannerAd _bannerAd;
   bool _isBannerReady = false;
 
   void _loadBannerAd(String type) {
-    this._bannerAd = BannerAd(
+    _bannerAd = BannerAd(
         adUnitId: "ca-app-pub-4285444827369918/4826506990",
-
-        //test Ad "ca-app-pub-3940256099942544/6300978111",
-
         request: AdRequest(),
         size: (type == "instagram") ? AdSize.mediumRectangle : AdSize.banner,
         listener: BannerAdListener(onAdLoaded: (_) {
@@ -65,7 +59,6 @@ class _RecentStatusState extends State<RecentStatus> {
         isLocal: widget.isLocal,
       )
     ]);
-
     super.initState();
   }
 
@@ -77,7 +70,6 @@ class _RecentStatusState extends State<RecentStatus> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -89,18 +81,14 @@ class _RecentStatusState extends State<RecentStatus> {
             /* handle drawer */
             if (_scaffoldKey.currentState!.hasDrawer) {
               if (_scaffoldKey.currentState!.isDrawerOpen) {
-                // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
                 Navigator.of(context).pop();
               } else {
-                // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
                 _scaffoldKey.currentState!.openDrawer();
               }
             }
           },
         ),
-
         actions: [
-
           Align(
             //which icon should i display on the appBar
             alignment: Alignment.center,
@@ -142,7 +130,6 @@ class _RecentStatusState extends State<RecentStatus> {
           "Save It",
           style: Theme.of(context).textTheme.headline1,
         ),
-        // centerTitle: true,
       ),
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width / 1.3,
@@ -199,7 +186,6 @@ class _RecentStatusState extends State<RecentStatus> {
                             child: Container(
                               height: 50,
                               decoration: BoxDecoration(
-                                // borderRadius: BorderRadius.circular(5.0),
                                 color: (_currentPageIndex == 0)
                                     ? const Color(0xFF085e55)
                                     : Colors.white,
@@ -297,7 +283,6 @@ class _RecentStatusState extends State<RecentStatus> {
             //       }
             //       return Container();
             //     }), //display the banner Ad
-
             ,
             const SizedBox(height: 10),
             Expanded(child: _pages[_currentPageIndex]),
