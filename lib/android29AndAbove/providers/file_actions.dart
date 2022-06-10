@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +19,7 @@ class FileActions with ChangeNotifier {
   Future<void> getSharedPreferences() async {
     /* get the currently selected platform */
     SharedPreferences _sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     _platform = await _sharedPreferences.getString("activePlatform");
   }
 
@@ -27,18 +29,20 @@ class FileActions with ChangeNotifier {
 
   void setSelectedPlatform(String platformName) async {
     SharedPreferences _sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     await _sharedPreferences.setString("activePlatform", platformName);
     notifyListeners();
   }
 
   static void saveFile(
       {required Uri uriSource, required String platformName}) async {
-    // var _baseName = pathFile.basename(path!);
-    Uri uriDestination = Uri.parse(
-        'content://com.android.externalstorage.documents/tree/primary%3ADownload%2Fsaveit%2FWhatsapp%2Ffede41d77ac345c18ccda2cfdd9076bf.jpg');
+    // print ("the source directory is ${await saf.getRealPathFromUri(uriSource)}");
+    //storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses/eb6dbe0d099040b4a2b719521ba43657.jpg
 
-    //content://com.android.externalstorage.documents/tree/primary%3ADownload%2Fsaveit%2FWhatsapp
+    var _baseName =
+        pathFile.basename((await saf.getRealPathFromUri(uriSource))!);
+
+    // print ("the basename is $_baseName");
 
     if (!Directory("/storage/emulated/0/Download/saveit/$platformName")
         .existsSync()) {
@@ -46,98 +50,47 @@ class FileActions with ChangeNotifier {
           .createSync();
     }
 
-    var path = saf.openDocumentTree(initialUri: uriDestination);
+    Uint8List data = (await saf.getDocumentContent(uriSource))!;
+    //Get the bytes from the Whatsapp Directory,
 
-    // print ("the path is ${await path}");
+    File _file = await File(
+            "/storage/emulated/0/Download/saveit/$platformName/$_baseName")
+        .create();
 
-    print("the source uri is $uriSource");
-    print("the source uri is $uriDestination");
+    // print (_file.path);
+    //storage/emulated/0/Download/saveit/Whatsapp/eb6dbe0d099040b4a2b719521ba43657.jpg
 
-    // await saf.copy(uriSource, uriDestination);
-
-    // File _file = File(path);
+    try {
+      if ((_file.existsSync())) {
+        print("it exists ");
+        //This returns true but nothing displays in the directory
+      } else {
+        _file.writeAsBytesSync(data);
+      }
+    } catch (e) {
+      //And does not return any error, the code dosen't reach here
+      print("Error coiyg $e");
+    }
     //
     // _file.copySync("/storage/emulated/0/Download/saveit/$platformName/$_baseName");
   }
 
-// static void saveFile(
-//     {required String platform, required String path}) async {
-//   //method to save file if android version is android 8.0 or less
-//
-//   //TODO check for storage space left.
-//   //TODO implement external storage.
-//
-//   var _baseName = pathFile.basename(path);
-//
-//   if (!Directory("/storage/emulated/0/saveit").existsSync()) {
-//     Directory("/storage/emulated/0/saveit").createSync();
-//   } else {
-//     if (!Directory("/storage/emulated/0/saveit/$platform").existsSync()) {
-//       Directory("/storage/emulated/0/saveit/$platform").createSync();
-//     } else {
-//       File _file = File(path);
-//       await _file.copy(
-//           "/storage/emulated/0/saveit/$platform/$_baseName"); //copy the file to the new directory
-//     }
-//   }
-// }
+  static Future<bool> checkFileDownloaded({required String path}) async {
+    // check if a file has already been downloaded
 
-// static Future<bool> checkFileDownloaded(
-//     {required String platform,
-//     required String path,
-//     required int androidVersion}) async {
-//   // check if a file has already been downloaded
-//   String _result = "";
-//   var appPath = await getExternalStorageDirectory();
-//
-//   if (androidVersion < 28) {
-//     switch (platform) {
-//       case "Whatsapp":
-//         _result = "/storage/emulated/0/saveit/whatsapp/";
-//         break;
-//       case "businesswhatsapp":
-//         _result = "/storage/emulated/0/saveit/businesswhatsapp/";
-//         break;
-//       case "gbwhatsapp":
-//         _result = "/storage/emulated/0/saveit/gbwhatsapp/";
-//         break;
-//       case "instagram":
-//         _result = "/storage/emulated/0/saveit/whatsapp/";
-//         break;
-//       default:
-//         _result = "/storage/emulated/0/saveit/whatsapp/";
-//     }
-//   } else {
-//     switch (platform) {
-//       case "Whatsapp":
-//         _result = "${appPath!.path}/whatsapp/";
-//         break;
-//       case "businesswhatsapp":
-//         _result = "${appPath!.path}/businesswhatsapp/";
-//         break;
-//       case "gbwhatsapp":
-//         _result = "${appPath!.path}/gbwhatsapp/";
-//         break;
-//       case "instagram":
-//         _result = "${appPath!.path}/whatsapp/";
-//         break;
-//       default:
-//         _result = "${appPath!.path}/whatsapp/";
-//     }
-//   }
-//
-//   if (File(_result + pathFile.basename(path)).existsSync()) {
-//     return true;
-//   } else {
-//     // print ("File does not exists");
-//     return false;
-//   }
-// }
+    File _file = File(path);
 
-// void deleteFile(String path) {
-//   /* delete a file */
-//   File _filePath = File(path);
-//   _filePath.deleteSync();
-//   notifyListeners();
-// }
+    if (_file.existsSync()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void deleteFile(String path) {
+    /* delete a file */
+    File _filePath = File(path);
+    _filePath.deleteSync();
+    notifyListeners();
+  }
 }

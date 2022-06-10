@@ -9,11 +9,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:social_saver/android29AndAbove/providers/file_actions.dart';
 
 class SingleItem extends StatefulWidget {
-  const SingleItem({Key? key, required this.image, required this.type})
+  const SingleItem(
+      {Key? key, required this.image, required this.type, required this.path})
       : super(key: key);
 
   final Uint8List image;
   final bool type;
+  final String path;
 
   @override
   _SingleItemState createState() => _SingleItemState();
@@ -89,7 +91,7 @@ class _SingleItemState extends State<SingleItem> {
                               radius: 25,
                               child: GestureDetector(
                                 onTap: () async {
-                                  // await Share.shareFiles([widget.path]);
+                                  await Share.shareFiles([widget.path]);
                                 },
                                 child: const Icon(
                                   Icons.share,
@@ -105,8 +107,8 @@ class _SingleItemState extends State<SingleItem> {
                               radius: 25,
                               child: GestureDetector(
                                 onTap: () {
-                                  // FileActions _obj = FileActions();
-                                  // _provider.deleteFile(widget.path);
+                                  FileActions _obj = FileActions();
+                                  _provider.deleteFile(widget.path);
                                   Navigator.of(context).pop();
                                 },
                                 child: const Icon(

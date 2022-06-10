@@ -31,27 +31,17 @@ class DisplayContentSaf extends StatefulWidget {
 class _DisplayContentSafState extends State<DisplayContentSaf> {
   int index = 0;
 
-  // var storagePath;
-
   Future<List<saf.PartialDocumentFile>> getAllFilesSaf(Uri uri) async {
     List<String>? _paths = [];
     final List<saf.PartialDocumentFile> files = [];
-    // List<saf.UriPermission>? persistedPermissionUris;
-    // Uri whatsAppUri = Uri.parse(
-    //     'content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses');
     const List<saf.DocumentFileColumn> columns = <saf.DocumentFileColumn>[
       saf.DocumentFileColumn.mimeType
     ];
-
-    // print ("the uri is $uri");
-    // print ("the persisted urls are ${await saf.persistedUriPermissions()}");
 
     if (!(await saf.isPersistedUri(uri))) {
       /* if URI permission has not been granted */
       await saf.openDocumentTree(initialUri: uri);
     }
-
-    // await saf.uri
 
     if (await saf.canRead(uri) ?? true) {
     } else {
@@ -71,7 +61,7 @@ class _DisplayContentSafState extends State<DisplayContentSaf> {
     return files;
   }
 
-  Widget mainContent(List<saf.PartialDocumentFile> filesList) {
+  Widget mainContent(List<saf.PartialDocumentFile> filesList, String platform) {
     if (filesList.isNotEmpty && filesList != []) {
       /* if the list is not empty display the images */
 
@@ -83,9 +73,15 @@ class _DisplayContentSafState extends State<DisplayContentSaf> {
           children: filesList.map((e) {
             if (widget.type == "images") {
               return ImageCard(
-                  info: e, isLocalType: widget.isLocal, index: index);
+                  platform: platform,
+                  info: e,
+                  isLocalType: widget.isLocal,
+                  index: index);
             } else {
-              return PlayVideo(videoInfo: e, type: widget.isLocal);
+              return PlayVideo(
+                  videoInfo: e,
+                  isLocalType: widget.isLocal,
+                  platform: platform);
               // return VideoCard(info: e,isLocalType: widget.isLocal, index: index);
             }
           }).toList(),
@@ -101,44 +97,9 @@ class _DisplayContentSafState extends State<DisplayContentSaf> {
     }
   }
 
-  // Future<void> generateThumbnail(saf.PartialDocumentFile videoData) async {
-  //   /* generate the thumbnail */
-  //
-  //   // String? path = await saf.getRealPathFromUri(videoData.metadata!.uri!);
-  //   //
-  //   // WidgetsFlutterBinding.ensureInitialized();
-  //   // // String? thumbnail;
-  //   // String? thumbnailPath = join((await getApplicationDocumentsDirectory()).path,
-  //   //     basename(path!.replaceAll(".mp4", ".jpg")));
-  //   // if (!File(thumbnailPath).existsSync()) {
-  //   //   await VideoThumbnail.thumbnailFile(
-  //   //       video: path,
-  //   //       thumbnailPath: (await getApplicationDocumentsDirectory()).path,
-  //   //       imageFormat: ImageFormat.JPEG,
-  //   //       quality: 100);
-  //   // } else {
-  //   //
-  //   // }
-  //   // return thumbnail;
-  //   // String? path = await saf.getRealPathFromUri(videoData.metadata!.uri!);
-  //   // String fileName = join(basename(path!),".jpg");
-  //   // final rootUri = videoData.metadata!.rootUri;
-  //   // final documentId = videoData.data![saf.DocumentFileColumn.id] as String?;
-  //   // print ("the documentID is ${videoData.data}");
-  //   // final bitMap = await saf.getDocumentThumbnail(rootUri: rootUri!, documentId: documentId!, width: 100, height: 100);
-  //   // print ("the image is $bitMap");
-  //
-  //   VideoThumbnail.thumbnailData(video:
-  //
-  //   )
-
-  // }
-
   @override
   void initState() {
     super.initState();
-    // setExternalStoragePath();
-    // Saf.releasePersistedPermissions();
   }
 
   @override
@@ -281,16 +242,18 @@ class _DisplayContentSafState extends State<DisplayContentSaf> {
                                 final mimeType = element
                                         .data![saf.DocumentFileColumn.mimeType]
                                     as String?;
-                                if (!(mimeType!.startsWith("image/"))) {
+                                if (mimeType!.startsWith("video/")) {
+                                  // print ("the mimeType is ${mimeType}");
                                   // String path = await saf.getRealPathFromUri(element.metadata!.uri!);
                                   // generateThumbnail(element);
                                   dataVideos.add(element);
                                 }
                               }
+                              // print ("the length of videos is ${dataVideos.length}");
                             }
                             return (widget.type == "images")
-                                ? mainContent(dataImages)
-                                : mainContent(dataVideos);
+                                ? mainContent(dataImages, _data)
+                                : mainContent(dataVideos, _data);
                           } else if (snapShot.hasError) {
                             print("Error ${snapShot.error}");
                             return Container();

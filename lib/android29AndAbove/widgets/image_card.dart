@@ -3,8 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_storage/saf.dart' as saf;
-import 'package:social_saver/android29AndAbove/pages/single_item.dart';
+import 'package:path/path.dart';
 
+import 'package:social_saver/android29AndAbove/pages/single_item.dart';
 import 'package:social_saver/android29AndAbove/providers/file_actions.dart';
 import 'package:social_saver/download__manual_icons.dart';
 
@@ -15,7 +16,7 @@ class ImageCard extends StatefulWidget {
   const ImageCard({
     Key? key,
     required this.info,
-    // required this.platform,
+    required this.platform,
     required this.isLocalType,
     required this.index,
   }) : super(key: key);
@@ -23,6 +24,7 @@ class ImageCard extends StatefulWidget {
   final saf.PartialDocumentFile info;
   final bool isLocalType;
   final int index;
+  final String platform;
 
   // final bool downloaded;
 
@@ -33,6 +35,7 @@ class ImageCard extends StatefulWidget {
 class _ImageCardState extends State<ImageCard> {
   bool _downloading = false;
   late Future<Uint8List> initializeImage;
+  late String path;
 
   Future<Uint8List> setContent() async {
     Uint8List content =
@@ -40,9 +43,23 @@ class _ImageCardState extends State<ImageCard> {
     return content;
   }
 
+  void setPath() async {
+    String baseName =
+        basename((await saf.getRealPathFromUri(widget.info.metadata!.uri!))!);
+
+    // print ("the basename is ${widget.platform}");
+
+    if (widget.platform == "Whatsapp") {
+      path = "/storage/emulated/0/Download/saveit/Whatsapp/$baseName";
+    } else {
+      path = "/storage/emulated/0/Download/saveit/Whatsapp/$baseName";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    setPath();
     initializeImage = setContent();
   }
 
@@ -63,37 +80,76 @@ class _ImageCardState extends State<ImageCard> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) => SingleItem(
-                                image: image, type: widget.isLocalType)));
+                                  image: image,
+                                  type: widget.isLocalType,
+                                  path: path,
+                                )));
                   },
                   child: Stack(children: [
                     Card(
                       elevation: 30,
                       child: Image.memory(image),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 15.0, right: 10),
-                        child: (_downloading)
-                            ? const CircularProgressIndicator()
-                            : CircleAvatar(
-                                radius: 17,
-                                backgroundColor: const Color(0xF26D6767),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    FileActions.saveFile(
-                                        platformName: "Whatsapp",
-                                        uriSource: widget.info.metadata!.uri!);
-                                  },
-                                  child: const Icon(
-                                    Download_Manual.download,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                )),
-                      ),
-                    )
+                    FutureBuilder(
+                        future: FileActions.checkFileDownloaded(path: path),
+                        builder: (ctx, asyncSnapShot) {
+                          if (asyncSnapShot.hasData) {
+                            bool fileExists = asyncSnapShot.data as bool;
+
+                            Widget icon = Container();
+
+                            if (!widget.isLocalType && !fileExists) {
+                              icon = GestureDetector(
+                                onTap: () async {
+                                  FileActions.saveFile(
+                                      platformName: "Whatsapp",
+                                      uriSource: widget.info.metadata!.uri!);
+                                  setState(() {});
+                                },
+                                child: const Icon(
+                                  Download_Manual.download,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              );
+                            } else if (!widget.isLocalType && fileExists) {
+                              icon = const Icon(
+                                Icons.download_done,
+                                color: Colors.white,
+                                size: 20,
+                              );
+                            } else {
+                              icon = GestureDetector(
+                                onTap: () {
+                                  _provider.deleteFile(path);
+                                },
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
+                              );
+                            }
+
+                            return Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 15.0, right: 10),
+                                child: (_downloading)
+                                    ? const CircularProgressIndicator()
+                                    : CircleAvatar(
+                                        radius: 17,
+                                        backgroundColor:
+                                            const Color(0xF26D6767),
+                                        child: icon),
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        })
                   ]));
             } else {
               return Container();

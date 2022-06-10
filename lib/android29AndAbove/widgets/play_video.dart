@@ -6,17 +6,24 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:social_saver/download__manual_icons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shared_storage/saf.dart' as saf;
+import 'package:path/path.dart';
 
 import '../providers/file_actions.dart';
 
 class PlayVideo extends StatefulWidget {
-  const PlayVideo({Key? key, required this.videoInfo, required this.type})
+  const PlayVideo(
+      {Key? key,
+      required this.videoInfo,
+      required this.isLocalType,
+      required this.platform})
       : super(key: key);
 
   final saf.PartialDocumentFile videoInfo;
-  final bool type;
+  final bool isLocalType;
+  final String platform;
 
   @override
   _PlayVideoState createState() => _PlayVideoState();
@@ -26,10 +33,25 @@ class _PlayVideoState extends State<PlayVideo> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   late ChewieController _chewieController;
+  late String path;
+
+  void setPath() async {
+    String baseName = basename(
+        (await saf.getRealPathFromUri(widget.videoInfo.metadata!.uri!))!);
+
+    // print ("the basename is ${widget.platform}");
+
+    if (widget.platform == "Whatsapp") {
+      path = "/storage/emulated/0/Download/saveit/Whatsapp/$baseName";
+    } else {
+      path = "/storage/emulated/0/Download/saveit/Whatsapp/$baseName";
+    }
+  }
 
   @override
   void initState() {
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    super.initState();
+    setPath();
     _controller =
         VideoPlayerController.contentUri(widget.videoInfo.metadata!.uri!);
     // _controller = VideoPlayerController.file(File(widget.videoPath));
@@ -56,16 +78,13 @@ class _PlayVideoState extends State<PlayVideo> {
         _chewieController.enterFullScreen();
       }
     });
-
-    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
-    // _controller.removeListener(() { })
     _controller.dispose();
     _chewieController.dispose();
+    super.dispose();
   }
 
   @override
@@ -87,6 +106,63 @@ class _PlayVideoState extends State<PlayVideo> {
               Align(
                   alignment: Alignment.center,
                   child: Chewie(controller: _chewieController)),
+              FutureBuilder(
+                  future: FileActions.checkFileDownloaded(path: path),
+                  builder: (ctx, asyncSnapShot) {
+                    if (asyncSnapShot.hasData) {
+                      bool fileExists = asyncSnapShot.data as bool;
+
+                      Widget icon = Container();
+
+                      if (!widget.isLocalType && !fileExists) {
+                        icon = GestureDetector(
+                          onTap: () async {
+                            FileActions.saveFile(
+                                platformName: "Whatsapp",
+                                uriSource: widget.videoInfo.metadata!.uri!);
+                            setState(() {});
+                          },
+                          child: const Icon(
+                            Download_Manual.download,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        );
+                      } else if (!widget.isLocalType && fileExists) {
+                        icon = const Icon(
+                          Icons.download_done,
+                          color: Colors.white,
+                          size: 20,
+                        );
+                      } else {
+                        icon = GestureDetector(
+                          onTap: () {
+                            _provider.deleteFile(path);
+                          },
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                        );
+                      }
+
+                      return Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 15.0, right: 10),
+                          child: CircleAvatar(
+                              radius: 17,
+                              backgroundColor: const Color(0xF26D6767),
+                              child: icon),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
             ]),
           );
         } else {
