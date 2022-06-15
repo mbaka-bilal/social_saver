@@ -286,7 +286,7 @@ class _DisplayContentSafState extends State<DisplayContentSaf> {
             return const Center(
                 child: Text(
               "Please Select a Platform",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ));
           });
     });

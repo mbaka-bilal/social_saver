@@ -86,6 +86,8 @@ class _ImageCardState extends State<ImageCard> {
                             //   _downloading = true;
                             // });
 
+                          print ("The path is ${widget.path}");
+
                               FileActions.saveFile(
                                   platform: widget.platform, path: widget.path);
 

@@ -200,36 +200,36 @@ class _MainDrawerState extends State<MainDrawer> {
               const SizedBox(
                 height: 50,
               ),
-              GestureDetector(
-                onTap: () async {
-                  provider.setSelectedPlatform("instagram");
-                  Navigator.of(context).pop();
-                  // Navigator.of(context).push(
-                  //     MaterialPageRoute(builder: (ctx) => InstagramPage()));
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    FaIcon(FontAwesomeIcons.instagram,
-                        color: (result == "instagram")
-                            ? const Color(0xFF20c65a)
-                            : Colors.black),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      "Instagram",
-                      style: (result == "instagram")
-                          ? Theme.of(context).textTheme.bodyText1
-                          : Theme.of(context).textTheme.bodyText2,
-                    )
-                  ],
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () async {
+              //     provider.setSelectedPlatform("instagram");
+              //     Navigator.of(context).pop();
+              //     // Navigator.of(context).push(
+              //     //     MaterialPageRoute(builder: (ctx) => InstagramPage()));
+              //   },
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.max,
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       const SizedBox(
+              //         width: 20,
+              //       ),
+              //       FaIcon(FontAwesomeIcons.instagram,
+              //           color: (result == "instagram")
+              //               ? const Color(0xFF20c65a)
+              //               : Colors.black),
+              //       const SizedBox(
+              //         width: 15,
+              //       ),
+              //       Text(
+              //         "Instagram",
+              //         style: (result == "instagram")
+              //             ? Theme.of(context).textTheme.bodyText1
+              //             : Theme.of(context).textTheme.bodyText2,
+              //       )
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 10,
               ),

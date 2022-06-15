@@ -32,26 +32,40 @@ class FileActions with ChangeNotifier {
   }
 
   static void saveFile({required String platform, required String path}) async {
-    //method to save file if android version is android 8.0 or less
 
-    //TODO check for storage space left.
-    //TODO implement external storage.
+    // print ("in save file $platform");
 
     var _baseName = pathFile.basename(path);
+    String _path = "";
 
-    if (!Directory("/storage/emulated/0/Download/saveit/").existsSync()) {
+    if (!(Directory("/storage/emulated/0/Download/saveit/").existsSync())) {
+      // print ("file does not exists");
       Directory("/storage/emulated/0/Download/saveit/").createSync();
     }
 
-    if (!Directory("/storage/emulated/0/Download/saveit/$platform")
-        .existsSync()) {
-      Directory("/storage/emulated/0/Download/saveit/$platform").createSync();
+    switch (platform) {
+      case "businesswhatsapp":
+        _path = "/storage/emulated/0/Download/saveit/businesswhatsapp/";
+        break;
+      case "Whatsapp":
+        _path = "/storage/emulated/0/Download/saveit/Whatsapp/";
+        break;
+      case "gbwhatsapp":
+        _path = "/storage/emulated/0/Download/saveit/gbwhatsapp/";
+        break;
     }
 
-    File _file = File(path);
-    if (!(_file.existsSync())) {
-      await _file.copy(
-          "/storage/emulated/0/Download/saveit/$platform/$_baseName"); //copy the file to the new directory
+    if (!(Directory(_path)
+        .existsSync())) {
+      // print ("path does not exists");
+      Directory(_path).createSync();
+    }
+
+    // String _filePath = join()
+
+    File _file = File(path); //check if the file exists
+    if (!(File(pathFile.join(_path,_baseName)).existsSync())) {
+      await _file.copy(pathFile.join(_path,_baseName)); //copy the file to the new directory
     }
   }
 
@@ -99,7 +113,7 @@ class FileActions with ChangeNotifier {
     // }
     // }
 
-    if (File("/storage/emulated/0/Download/saveit/$platform" +
+    if (File("/storage/emulated/0/Download/saveit/$platform/" +
             pathFile.basename(path))
         .existsSync()) {
       return true;

@@ -31,87 +31,99 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   var _controller;
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  var androidInfo;
+  // late var androidInfo;
 
-  Future<void> getAndroidInfo() async {
-    androidInfo = await deviceInfoPlugin.androidInfo;
-
-    setState(() {});
+  Future<AndroidDeviceInfo> getAndroidInfo() async {
+    AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+    return androidInfo;
+    // setState(() {});
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAndroidInfo();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
   }
 
   @override
   Widget build(BuildContext context) {
-    if ((androidInfo.version.sdkInt >= 28)) {
-      return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<fileActions29.FileActions>(
-              create: (context) => fileActions29.FileActions()),
-          ChangeNotifierProvider<themeProvider29.ThemeProvider>(
-              create: (context) => themeProvider29.ThemeProvider())
-        ],
-        child: Consumer<themeProvider29.ThemeProvider>(
-            builder: (ctx, themeProvider, _) {
-          // themeProvider.getSavedTheme(); //get the saved theme from shared preferences.
-          // print("The theme is ${themeProvider.themeMode}");
 
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: themeProvider.currentTheme,
-            home: AnimatedSplashScreen.withScreenFunction(
-                splashIconSize: 100,
-                screenFunction: () async {
-                  _controller.forward();
-                  return const HomeSaf();
-                },
-                splash: SplashPageAnimation(
-                  controller: _controller,
-                )),
-            routes: {
-              "/home": (ctx) => HomeSaf(),
-            },
-          );
-        }),
-      );
-    } else {
-      return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<FileActions>(
-              create: (context) => FileActions()),
-          ChangeNotifierProvider<ThemeProvider>(
-              create: (context) => ThemeProvider())
-        ],
-        child: Consumer<ThemeProvider>(builder: (ctx, themeProvider, _) {
-          // themeProvider.getSavedTheme(); //get the saved theme from shared preferences.
-          // print("The theme is ${themeProvider.themeMode}");
+    return FutureBuilder(
+        future: getAndroidInfo(),
+        builder: (context,asycSnapShot) {
+          if (asycSnapShot.hasData){
+            AndroidDeviceInfo androidInfo = asycSnapShot.data as AndroidDeviceInfo;
+            if ((androidInfo.version.sdkInt! >= 28)) {
+              return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<fileActions29.FileActions>(
+                      create: (context) => fileActions29.FileActions()),
+                  ChangeNotifierProvider<themeProvider29.ThemeProvider>(
+                      create: (context) => themeProvider29.ThemeProvider())
+                ],
+                child: Consumer<themeProvider29.ThemeProvider>(
+                    builder: (ctx, themeProvider, _) {
+                      // themeProvider.getSavedTheme(); //get the saved theme from shared preferences.
+                      // print("The theme is ${themeProvider.themeMode}");
 
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: themeProvider.currentTheme,
-            home: AnimatedSplashScreen.withScreenFunction(
-                splashIconSize: 100,
-                screenFunction: () async {
-                  _controller.forward();
-                  return const Home();
-                },
-                splash: SplashPageAnimation(
-                  controller: _controller,
-                )),
-            routes: {
-              "/home": (ctx) => Home(),
-            },
-          );
-        }),
-      );
-    }
+                      return MaterialApp(
+                        debugShowCheckedModeBanner: false,
+                        theme: themeProvider.currentTheme,
+                        home: AnimatedSplashScreen.withScreenFunction(
+                            splashIconSize: 100,
+                            screenFunction: () async {
+                              _controller.forward();
+                              return const HomeSaf();
+                            },
+                            splash: SplashPageAnimation(
+                              controller: _controller,
+                            )),
+                        routes: {
+                          "/home": (ctx) => HomeSaf(),
+                        },
+                      );
+                    }),
+              );
+            } else {
+              return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<FileActions>(
+                      create: (context) => FileActions()),
+                  ChangeNotifierProvider<ThemeProvider>(
+                      create: (context) => ThemeProvider())
+                ],
+                child: Consumer<ThemeProvider>(builder: (ctx, themeProvider, _) {
+                  // themeProvider.getSavedTheme(); //get the saved theme from shared preferences.
+                  // print("The theme is ${themeProvider.themeMode}");
+
+                  return MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    theme: themeProvider.currentTheme,
+                    home: AnimatedSplashScreen.withScreenFunction(
+                        splashIconSize: 100,
+                        screenFunction: () async {
+                          _controller.forward();
+                          return const Home();
+                        },
+                        splash: SplashPageAnimation(
+                          controller: _controller,
+                        )),
+                    routes: {
+                      "/home": (ctx) => Home(),
+                    },
+                  );
+                }),
+              );
+            }
+          }else{
+            return Container();
+          }
+        });
+
+
+
   }
 }
 
