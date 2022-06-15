@@ -84,7 +84,7 @@ class _VideoCardState extends State<VideoCard> {
                     future: FileActions.checkFileDownloaded(
                         platform: widget.platform,
                         path: widget.path,
-                        androidVersion: widget.androidVersion),
+                        ),
                     builder: (ctx, snapShot) {
                       if (snapShot.hasData) {
                         var data = snapShot.data as bool;
@@ -105,15 +105,10 @@ class _VideoCardState extends State<VideoCard> {
                                 setState(() {});
                                 null;
                               } else {
-                                if (widget.androidVersion < 28) {
-                                  FileActions.saveFileSdkLess28(
-                                      platform: widget.platform,
-                                      path: widget.path);
-                                } else {
                                   FileActions.saveFile(
                                       platform: widget.platform,
                                       path: widget.path);
-                                }
+
                                 setState(() {
                                   _downloading = false;
                                 });

@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // import 'package:saf/saf.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:shared_storage/saf.dart' as saf;
+// import 'package:shared_storage/saf.dart' as saf;
 
 import '../providers/file_actions.dart';
 import '../widgets/video_card.dart';
@@ -33,48 +33,48 @@ class _DisplayContentState extends State<DisplayContent> {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   var androidInfo;
   List<String> _filesList = [];
-  List<saf.PartialDocumentFile> _partialFileList = [];
+  // List<saf.PartialDocumentFile> _partialFileList = [];
   var storagePath;
 
   Future<void> setExternalStoragePath() async {
     storagePath = await getExternalStorageDirectory();
   }
 
-  Future<List<saf.PartialDocumentFile>?> getAllFilesSaf() async {
-    List<String>? _paths = [];
-    // List<saf.UriPermission>? persistedPermissionUris;
-    Uri whatsAppUri = Uri.parse(
-        'content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses');
-    const List<saf.DocumentFileColumn> columns = <saf.DocumentFileColumn>[
-      saf.DocumentFileColumn.mimeType
-    ];
-    final Uri? grantedUri = await saf.openDocumentTree(initialUri: whatsAppUri);
-
-    // persistedPermissionUris = await saf.persistedUriPermissions();
-
-    // if (!(await saf.isPersistedUri(whatsAppUri))) {
-    //    grantedUri =
-    //       await saf.openDocumentTree(initialUri: whatsAppUri);
+  // Future<List<saf.PartialDocumentFile>?> getAllFilesSaf() async {
+    // List<String>? _paths = [];
+    // // List<saf.UriPermission>? persistedPermissionUris;
+    // Uri whatsAppUri = Uri.parse(
+    //     'content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses');
+    // const List<saf.DocumentFileColumn> columns = <saf.DocumentFileColumn>[
+    //   saf.DocumentFileColumn.mimeType
+    // ];
+    // final Uri? grantedUri = await saf.openDocumentTree(initialUri: whatsAppUri);
     //
-    // }
+    // // persistedPermissionUris = await saf.persistedUriPermissions();
+    //
+    // // if (!(await saf.isPersistedUri(whatsAppUri))) {
+    // //    grantedUri =
+    // //       await saf.openDocumentTree(initialUri: whatsAppUri);
+    // //
+    // // }
+    //
+    // //read all files in the current directory
+    // final saf.DocumentFile? documentFileOfMyGrantedUri = await grantedUri!
+    //     .toDocumentFile();
+    // final List<saf.PartialDocumentFile> files = [];
+    // final Stream<
+    //     saf.PartialDocumentFile> onNewFileLoaded = documentFileOfMyGrantedUri!
+    //     .listFiles(columns);
+    // onNewFileLoaded.listen((event) {
+    //   // if (event.data![saf.DocumentFileColumn.mimeType] == "image/jpeg"){
+    //   //
+    //   // }
+    //   files.add(event);
+    // },
+    //   // onDone: () => print("the files are ${files[0].data}")
+    // );
 
-    //read all files in the current directory
-    final saf.DocumentFile? documentFileOfMyGrantedUri = await grantedUri!
-        .toDocumentFile();
-    final List<saf.PartialDocumentFile> files = [];
-    final Stream<
-        saf.PartialDocumentFile> onNewFileLoaded = documentFileOfMyGrantedUri!
-        .listFiles(columns);
-    onNewFileLoaded.listen((event) {
-      // if (event.data![saf.DocumentFileColumn.mimeType] == "image/jpeg"){
-      //
-      // }
-      files.add(event);
-    },
-      // onDone: () => print("the files are ${files[0].data}")
-    );
-
-    return files;
+    // return files;
 
     // if (grantedUri != null){
     //   print ("permission granted");
@@ -111,7 +111,7 @@ class _DisplayContentState extends State<DisplayContent> {
     // }
 
     // return _paths;
-  }
+  // }
 
   Future<void> getAndroidInfo() async {
     androidInfo = await deviceInfoPlugin.androidInfo;
@@ -191,79 +191,55 @@ class _DisplayContentState extends State<DisplayContent> {
                   //if we are getting statuses
                   switch (_data) {
                     case "Whatsapp":
-                      if (androidInfo.version.sdkInt >= 28) {
-                        //if android version is equals or greater than version 9
-                        _result =
-                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
-                      } else {
                         _result = "WhatsApp/Media/.Statuses";
-                      }
                       break;
                     case "businesswhatsapp":
-                      if (androidInfo.version.sdkInt >= 28) {
-                        _result =
-                        "Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses";
-                      } else {
                         _result = "WhatsApp Business/Media/.Statuses";
-                      }
+
                       break;
                     case "gbwhatsapp":
-                      if (androidInfo.version.sdkInt >= 28) {
+
                         _result = "GBWhatsApp/Media/.Statuses";
-                      } else {
-                        _result = "GBWhatsApp/Media/.Statuses";
-                      }
+
                       break;
                     case " ":
-                      if (androidInfo.version.sdkInt >= 28) {
-                        //if android version is equals or greater than version 9
-                        _result =
-                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
-                      } else {
+
                         _result = "WhatsApp/Media/.Statuses";
-                      }
+
                       break;
                     case "":
-                      if (androidInfo.version.sdkInt >= 28) {
-                        //if android version is equals or greater than version 9
-                        _result =
-                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
-                      } else {
+
                         _result = "WhatsApp/Media/.Statuses";
-                      }
+
                       break;
                     default:
-                      if (androidInfo.version.sdkInt >= 28) {
-                        //if android version is equals or greater than version 9
-                        _result =
-                        "Android/media/com.whatsapp/WhatsApp/Media/.Statuses";
-                      } else {
+
                         _result = "WhatsApp/Media/.Statuses";
-                      }
+
                   }
                 } else {
                   // if we are getting local saved files
                   switch (_data) {
                     case "Whatsapp":
-                      _result = "/storage/emulated/0/saveit/Whatsapp/";
+                      _result = "/storage/emulated/0/Download/saveit/Whatsapp/";
                       break;
                     case "businesswhatsapp":
-                      _result = "/storage/emulated/0/saveit/businesswhatsapp/";
+                      _result = "/storage/emulated/0/Download/saveit/businesswhatsapp/";
                       break;
                     case "gbwhatsapp":
-                      _result = "/storage/emulated/0/saveit/gbwhatsapp/";
+                      _result = "/storage/emulated/0/Download/saveit/gbwhatsapp/";
                       break;
                     case "instagram":
-                      _result = "/storage/emulated/0/saveit/instagram/";
+                      _result = "/storage/emulated/0/Download/saveit/instagram/";
                       break;
                     case " ":
-                      _result = "/storage/emulated/0/saveit/Whatsapp/";
+                      _result = "/storage/emulated/0/Download/saveit/Whatsapp/";
                       break;
                     case "":
-                      _result = "/storage/emulated/0/saveit/Whatsapp/";
+                      _result = "/storage/emulated/0/Download/saveit/Whatsapp/";
                       break;
                     default:
-                      _result = "/storage/emulated/0/saveit/Whatsapp/";
+                      _result = "/storage/emulated/0/Download/saveit/Whatsapp/";
                   }
                 }
                 //end setting the correct path
@@ -288,7 +264,7 @@ class _DisplayContentState extends State<DisplayContent> {
                         .map((item) => item.path)
                         .where((item) {
                       if (widget.type == "images") {
-                        return item.endsWith(".jpg") || item.endsWith(".png");
+                        return item.endsWith(".jpg") || item.endsWith(".png") || item.endsWith(".jpeg");
                       } else {
                         return item.endsWith(".mp4") || item.endsWith(".3gp");
                       }
@@ -318,57 +294,58 @@ class _DisplayContentState extends State<DisplayContent> {
                               fontFamily: "Poppins"),
                         ));
                   } else {
-                    if (androidInfo.version.sdkInt >= 28) {
-                      //if android version 9 or above
-                      return FutureBuilder(
-                        //so the app does not start searching the directory until we fetch all the paths.
-                          future: getAllFilesSaf(),
-                          builder: (ctx, snapShot) {
-                            if (snapShot.hasData) {
-                              List<saf.PartialDocumentFile>? data =
-                              snapShot.data as List<saf.PartialDocumentFile>?;
-                              // print("the data is $data");
-                              //remove any non wanted files
-                              // _partialFileList =
-                              //     data!.map((item) => item).where((item) {
-                              //       Uint8List? content = saf.getDocumentContent(item.metadata!.uri!);
-                              //       final mimeType = item.
-                              //   if (widget.type == "images") {
-                              //     return item[saf.DocumentFileColumn.mimeType];
-                              //   } else {
-                              //     return item.endsWith(".mp4") ||
-                              //         item.endsWith(".3gp");
-                              //   }
-                              // }).toList(growable: false);
-                              // // print ("the fileList is $_filesList");
-                              return mainContent(_filesList, _data);
-                            } else if (snapShot.hasError) {
-                              print("Error ${snapShot.error}");
-                              return Container();
-                            } else {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  CircularProgressIndicator(),
-                                ],
-                              );
-                            }
-                          });
-                    } else {
+                    // if (androidInfo.version.sdkInt >= 28) {
+                    //   //if android version 9 or above
+                    //   return FutureBuilder(
+                    //     //so the app does not start searching the directory until we fetch all the paths.
+                    //       future: getAllFilesSaf(),
+                    //       builder: (ctx, snapShot) {
+                    //         if (snapShot.hasData) {
+                    //           List<saf.PartialDocumentFile>? data =
+                    //           snapShot.data as List<saf.PartialDocumentFile>?;
+                    //           // print("the data is $data");
+                    //           //remove any non wanted files
+                    //           // _partialFileList =
+                    //           //     data!.map((item) => item).where((item) {
+                    //           //       Uint8List? content = saf.getDocumentContent(item.metadata!.uri!);
+                    //           //       final mimeType = item.
+                    //           //   if (widget.type == "images") {
+                    //           //     return item[saf.DocumentFileColumn.mimeType];
+                    //           //   } else {
+                    //           //     return item.endsWith(".mp4") ||
+                    //           //         item.endsWith(".3gp");
+                    //           //   }
+                    //           // }).toList(growable: false);
+                    //           // // print ("the fileList is $_filesList");
+                    //           return mainContent(_filesList, _data);
+                    //         } else if (snapShot.hasError) {
+                    //           print("Error ${snapShot.error}");
+                    //           return Container();
+                    //         } else {
+                    //           return Column(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: const [
+                    //               CircularProgressIndicator(),
+                    //             ],
+                    //           );
+                    //         }
+                    //       });
+                    // }
+                  // else {
                       //if android 8 or below
                       _filesList = Directory("/storage/emulated/0/$_result")
                           .listSync()
                           .map((item) => item.path)
                           .where((item) {
                         if (widget.type == "images") {
-                          return item.endsWith(".jpg") || item.endsWith(".png");
+                          return item.endsWith(".jpg") || item.endsWith(".png") || item.endsWith("jpeg");
                         } else {
                           return item.endsWith(".mp4") || item.endsWith(".3gp");
                         }
                       }).toList(growable: false);
                       return mainContent(_filesList, _data);
-                    }
+                    // }
                   }
                 }
               } else if (snapShot.hasError) {

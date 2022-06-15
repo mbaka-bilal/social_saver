@@ -65,7 +65,7 @@ class _ImageCardState extends State<ImageCard> {
                 future: FileActions.checkFileDownloaded(
                     platform: widget.platform,
                     path: widget.path,
-                    androidVersion: widget.androidVersion),
+                    ),
                 builder: (ctx, snapShot) {
                   if (snapShot.hasData) {
                     var data = snapShot.data as bool;
@@ -77,25 +77,18 @@ class _ImageCardState extends State<ImageCard> {
                     );
 
                     if (!widget.isLocalType && !data) {
+
                       _icon = GestureDetector(
                         onTap: () async {
-                          if (data) {
-                            // print("in here buddy");
-                            setState(() {});
-                            null;
-                          } else {
+                         // print ("to save the image");
                             // setState(() {
                             //   // print("in set dstate");
                             //   _downloading = true;
                             // });
 
-                            if (widget.androidVersion < 28) {
-                              FileActions.saveFileSdkLess28(
-                                  platform: widget.platform, path: widget.path);
-                            } else {
                               FileActions.saveFile(
                                   platform: widget.platform, path: widget.path);
-                            }
+
                             setState(() {
                               _downloading = false;
                             });
@@ -170,7 +163,7 @@ class _ImageCardState extends State<ImageCard> {
                             //     _downloading = false;
                             //   });
                             // }
-                          }
+
                         },
                         child: (_downloading)
                             ? const CircularProgressIndicator()

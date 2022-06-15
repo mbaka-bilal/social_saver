@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 import 'package:social_saver/android29AndAbove/providers/file_actions.dart';
 
 class SingleItem extends StatefulWidget {
@@ -91,7 +91,7 @@ class _SingleItemState extends State<SingleItem> {
                               radius: 25,
                               child: GestureDetector(
                                 onTap: () async {
-                                  await Share.shareFiles([widget.path]);
+                                  // await Share.shareFiles([widget.path]);
                                 },
                                 child: const Icon(
                                   Icons.share,
